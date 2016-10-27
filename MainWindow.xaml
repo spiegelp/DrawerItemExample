@@ -3,10 +3,47 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:DrawerItemExample"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Drawer item demo" Height="450" Width="600" WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="220">
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" DockPanel.Dock="Top"
+                                  HorizontalAlignment="Right" Margin="16" IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                    <ListBox x:Name="DemoItemsListBox" Margin="0,16" SelectedIndex="0" PreviewMouseLeftButtonUp="UIElement_OnPreviewMouseLeftButtonUp">
+                        <ListBox.Resources>
+                            <DataTemplate DataType="{x:Type local:MainItem}">
+                                <TextBlock Text="{Binding Path=Label}" FontSize="14" FontWeight="Bold" Margin="16" />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type local:SubItem}">
+                                <TextBlock Text="{Binding Path=Label}" FontSize="14" Margin="48,16,16,16" />
+                            </DataTemplate>
+                        </ListBox.Resources>
+                        <local:MainItem Label="Main item">
+                            <local:MainItem.Content>
+                                <local:MainItemContent />
+                            </local:MainItem.Content>
+                        </local:MainItem>
+                        <local:SubItem Label="Sub item">
+                            <local:SubItem.Content>
+                                <local:SubItemContent />
+                            </local:SubItem.Content>
+                        </local:SubItem>
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel>
+                <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" DockPanel.Dock="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False" x:Name="MenuToggleButton"/>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Margin="48,0,0,0" Text="Drawer item demo" />
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <ContentControl Margin="16" Content="{Binding ElementName=DemoItemsListBox, Path=SelectedItem.Content}" />
+            </DockPanel>
+        </materialDesign:DrawerHost>
     </Grid>
 </Window>
